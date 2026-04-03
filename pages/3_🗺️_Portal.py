@@ -87,6 +87,11 @@ def get_genero_dominante(genres):
     if isinstance(genres, str):
         try: genres = ast.literal_eval(genres)
         except: genres = [genres]
+    # 🔥 convertir array numpy a lista
+    if hasattr(genres, 'tolist'):
+        genres = genres.tolist()
+    if not genres:
+        return 'Drama'
     ORDEN = ['Horror','Crime','Romance','Music','Action','Fantasy','Sci-Fi',
              'Comedy','Drama','Mystery','Thriller','Sports','Adventure','Family']
     for g in ORDEN:

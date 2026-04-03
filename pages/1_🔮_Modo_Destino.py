@@ -7,7 +7,6 @@ st.set_page_config(page_title="Modo Destino · TobiCross", page_icon="🔮", lay
 
 df_anime, df_pelser, index_scores, index_embed = cargar_datos()
 
-# ── Session state ──────────────────────────────
 if 'destino_paso' not in st.session_state:
     st.session_state.destino_paso = 0
 if 'destino_respuestas' not in st.session_state:
@@ -116,7 +115,6 @@ st.caption("Cinco preguntas. Un destino. Tu anime perfecto.")
 paso = st.session_state.destino_paso
 
 if paso < 5:
-    # ── Barra de progreso ──
     progreso = paso / 5
     st.markdown(f"""
     <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
@@ -128,7 +126,6 @@ if paso < 5:
     </div>
     """, unsafe_allow_html=True)
 
-    # ── Pregunta actual ──
     p = PREGUNTAS[paso]
     st.markdown(f"**{p['num']}. {p['texto']}**")
     st.markdown("")
@@ -141,7 +138,6 @@ if paso < 5:
 
     seleccion = st.radio("", opciones_texto, index=idx_actual, key=f"radio_{paso}")
 
-    # Guardar índice seleccionado
     if seleccion:
         idx = opciones_texto.index(seleccion)
         st.session_state.destino_respuestas[paso] = idx
@@ -163,7 +159,6 @@ if paso < 5:
             st.rerun()
 
 else:
-    # ── Calcular arquetipo ──
     puntos = {'errante': 0, 'romantico': 0, 'guerrero': 0, 'filosofo': 0, 'libre': 0}
     for paso_idx, opcion_idx in st.session_state.destino_respuestas.items():
         _, _, arquetipo_key = PREGUNTAS[paso_idx]['opciones'][opcion_idx]
@@ -172,7 +167,6 @@ else:
     arquetipo = max(puntos, key=puntos.get)
     info      = ARQUETIPOS[arquetipo]
 
-    # ── Mostrar arquetipo ──
     st.markdown(f"""
     <div style="border-radius:16px; border:1px solid {info['color']}40;
                 background:{info['bg']}; padding:28px; text-align:center; margin:1rem 0;">
@@ -186,36 +180,32 @@ else:
     </div>
     """, unsafe_allow_html=True)
 
-    # ── Animes ──
     with st.spinner("✨ Invocando tu destino..."):
         resultados = df_pelser[df_pelser['título'].str.contains(info['query'], case=False, na=False)]
         if not resultados.empty:
             row = resultados.iloc[0]
-            recomendaciones = recomendar_anime(row, df_anime, index_scores, index_embed, k=3)
+            recomendaciones = recomendar_anime(row, df_anime, index_scores, index_embed, k=5)
 
             st.subheader("✨ Tu anime del destino")
-            cols = st.columns(3)
-            for i, anime in enumerate(recomendaciones):
+            cols = st.columns(min(len(recomendaciones), 3))
+            for i, anime in enumerate(recomendaciones[:3]):
                 genres = anime.get('genres_clean', [])
                 if isinstance(genres, str):
                     try: genres = ast.literal_eval(genres)
                     except: genres = [genres]
+
                 with cols[i]:
-                    st.markdown(f"""
-                    <div style="border-radius:12px; border:1px solid #eee; overflow:hidden;">
-                      <div style="background:{info['bg']}; height:160px; display:flex;
-                                  align-items:center; justify-content:center;">
-                        <img src="{anime['image_url']}" style="height:150px; width:auto; object-fit:contain;"/>
-                      </div>
-                      <div style="padding:10px;">
-                        <p style="font-size:13px; font-weight:600; margin:0 0 3px;
-                                  color:#111; line-height:1.3;">{anime['title']}</p>
-                        <p style="font-size:11px; color:#888; margin:0;">
-                          ⭐ {anime['score']} · {', '.join(genres[:2])}
-                        </p>
-                      </div>
-                    </div>
-                    """, unsafe_allow_html=True)
+                    st.markdown(
+                        f'<div style="border-radius:12px;border:1px solid #eee;overflow:hidden;">'
+                        f'<div style="background:{info["bg"]};height:160px;display:flex;align-items:center;justify-content:center;">'
+                        f'<img src="{anime["image_url"]}" style="height:150px;width:auto;object-fit:contain;"/>'
+                        f'</div>'
+                        f'<div style="padding:10px;">'
+                        f'<p style="font-size:13px;font-weight:600;margin:0 0 3px;color:#111;line-height:1.3;">{anime["title"]}</p>'
+                        f'<p style="font-size:11px;color:#888;margin:0;">⭐ {anime["score"]} · {", ".join(genres[:2])}</p>'
+                        f'</div></div>',
+                        unsafe_allow_html=True
+                    )
 
     st.markdown("")
     if st.button("🔄 Volver a intentarlo", use_container_width=True):

@@ -1,23 +1,21 @@
 import streamlit as st
 from core.data import cargar_datos
-from core.modelo import recomendar_anime
+from core.modelo import recomendar_anime, get_primera_temporada, _idx_posicional
 import ast
 import numpy as np
 from collections import defaultdict
 import faiss
 
-
 st.set_page_config(page_title="Modo Dúo · TobiCross", page_icon="👥", layout="centered")
 
 df_anime, df_pelser, index_scores, index_embed = cargar_datos()
 
-# ── Arquetipos ────────────────────────────────
 def detectar_arquetipo(row):
     scores = {
-        'errante':   float(row.get('dark_score', 0))   + float(row.get('crime_score', 0)),
-        'romantico': float(row.get('romance', 0))       + float(row.get('music_score', 0)),
-        'guerrero':  float(row.get('action_score', 0))  + float(row.get('adventure_score', 0)),
-        'filosofo':  float(row.get('dystopia_score', 0))+ float(row.get('thriller_score', 0)),
+        'errante':   float(row.get('dark_score', 0))    + float(row.get('crime_score', 0)),
+        'romantico': float(row.get('romance', 0))        + float(row.get('music_score', 0)),
+        'guerrero':  float(row.get('action_score', 0))   + float(row.get('adventure_score', 0)),
+        'filosofo':  float(row.get('dystopia_score', 0)) + float(row.get('thriller_score', 0)),
         'libre':     float(row.get('feel_good_score', 0))+ float(row.get('comedy_score', 0)),
     }
     return max(scores, key=scores.get)
@@ -144,7 +142,6 @@ if buscar and q1 and q2:
         info1 = ARQUETIPOS[arq1]
         info2 = ARQUETIPOS[arq2]
 
-        # ── Arquetipos ────────────────────────
         c1, _, c2 = st.columns([5, 1, 5])
         with c1:
             st.markdown(f"""
@@ -169,7 +166,6 @@ if buscar and q1 and q2:
             </div>
             """, unsafe_allow_html=True)
 
-        # ── Compatibilidad ────────────────────
         pct     = calcular_compatibilidad(row1, row2)
         mensaje = get_mensaje(pct)
 
@@ -186,7 +182,6 @@ if buscar and q1 and q2:
         </div>
         """, unsafe_allow_html=True)
 
-        # ── Fusión ────────────────────────────
         with st.spinner("🎌 Fusionando universos..."):
             rrf1    = get_rrf(row1)
             rrf2    = get_rrf(row2)
@@ -194,16 +189,20 @@ if buscar and q1 and q2:
 
         st.markdown('<p style="font-size:14px; font-weight:600; margin:0 0 12px;">🎌 Anime que los une</p>', unsafe_allow_html=True)
 
-        # Deduplicar por título base
         from core.scoring import limpiar_titulo_base
-        vistos = set()
+        vistos  = set()
         mostrar = []
         for idx in top_idx:
             anime = df_anime.iloc[idx]
             base  = limpiar_titulo_base(anime['title'])
             if base not in vistos:
                 vistos.add(base)
-                mostrar.append(idx)
+                primera = get_primera_temporada(anime['title'], df_anime)
+                if primera is not None:
+                    idx_p = _idx_posicional(df_anime, primera['title'])
+                    mostrar.append(idx_p if idx_p is not None else idx)
+                else:
+                    mostrar.append(idx)
             if len(mostrar) >= 3:
                 break
 

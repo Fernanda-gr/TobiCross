@@ -13,20 +13,34 @@ from core.scoring import (
 )
 
 
+def get_primera_temporada(title, df_anime):
+    """Dado un título, devuelve la primera temporada disponible en df_anime."""
+    base = limpiar_titulo_base(title)
+    candidatos = df_anime[df_anime['title'].apply(
+        lambda t: limpiar_titulo_base(t) == base
+    )]
+    if candidatos.empty:
+        return None
+    return candidatos.loc[candidatos['title'].apply(len).idxmin()]
+
+
+def _idx_posicional(df_anime, title):
+    """Devuelve el índice posicional (iloc) de un título en df_anime."""
+    match = df_anime[df_anime['title'] == title]
+    if match.empty:
+        return None
+    return df_anime.index.get_loc(match.index[0])
+
+
 def construir_vector_scores(row, GENRES_FINAL, DEMOG_FINAL):
-    """Construye vector_scores para una fila nueva de TMDB."""
     genres_vector = np.zeros(len(GENRES_FINAL))
     for i, g in enumerate(GENRES_FINAL):
         if g in row.get('genres_clean', []):
             genres_vector[i] = 1.0
     genres_vector = norm(genres_vector)
-
-    demog_vector = np.zeros(len(DEMOG_FINAL))
-    demog_vector = norm(demog_vector)
-
+    demog_vector  = norm(np.zeros(len(DEMOG_FINAL)))
     n_genres = len(genres_vector)
     n_demog  = len(demog_vector)
-
     return np.concatenate([
         genres_vector * (peso_genres / n_genres),
         demog_vector  * (peso_demog  / n_demog),
@@ -230,10 +244,6 @@ def rerank(query_row, candidatos, faiss_scores, df_anime):
 
 
 def recomendar_anime(row, df_anime, index_scores, index_embed, k=5):
-    """
-    row — dict o Series con los datos de la película query
-          (ya procesada con scores calculados y embedding)
-    """
     gen_query     = set(row.get('genres_clean', []))
     FAMILY_GENRES = {'Family', 'Kids', 'Animation'}
 
@@ -395,19 +405,22 @@ def recomendar_anime(row, df_anime, index_scores, index_embed, k=5):
 
         vistos_titulos.add(base)
         cluster_counts[cluster] += 1
-        recomendaciones.append(idx)
+
+        # 🔥 Siempre mostrar la primera temporada
+        primera = get_primera_temporada(anime['title'], df_anime)
+        if primera is not None:
+            idx_p = _idx_posicional(df_anime, primera['title'])
+            recomendaciones.append(idx_p if idx_p is not None else idx)
+        else:
+            recomendaciones.append(idx)
 
         if len(recomendaciones) >= k:
             break
 
     return [df_anime.iloc[idx] for idx in recomendaciones]
 
+
 def recomendar_desde_anime(anime_row, df_anime, index_scores, index_embed, k=2):
-    """Recomienda animes similares a un anime dado (no a una película)."""
-    from collections import defaultdict, Counter
-    
-    gen_query = to_set(anime_row.get('genres_clean'))
-    
     vec_scores = np.array(anime_row['vector_scores'], dtype='float32').reshape(1, -1)
     faiss.normalize_L2(vec_scores)
     vec_embed = np.array(anime_row['embedding'], dtype='float32').reshape(1, -1)
@@ -427,7 +440,7 @@ def recomendar_desde_anime(anime_row, df_anime, index_scores, index_embed, k=2):
 
     vistos_titulos = set()
     vistos_titulos.add(limpiar_titulo_base(anime_row['title']))
-    cluster_counts = Counter()
+    cluster_counts  = Counter()
     recomendaciones = []
 
     for idx in candidatos:
@@ -442,9 +455,23 @@ def recomendar_desde_anime(anime_row, df_anime, index_scores, index_embed, k=2):
 
         vistos_titulos.add(base)
         cluster_counts[cluster] += 1
-        recomendaciones.append(df_anime.iloc[idx])
+
+        # 🔥 Siempre mostrar la primera temporada
+        primera = get_primera_temporada(anime['title'], df_anime)
+        if primera is not None:
+            idx_p = _idx_posicional(df_anime, primera['title'])
+            recomendaciones.append(df_anime.iloc[idx_p] if idx_p is not None else df_anime.iloc[idx])
+        else:
+            recomendaciones.append(df_anime.iloc[idx])
 
         if len(recomendaciones) >= k:
             break
 
     return recomendaciones
+
+
+def preferir_primera_temporada(animes):
+    """De una lista de animes, prefiere el título más corto."""
+    if not animes:
+        return None
+    return min(animes, key=lambda a: len(str(a.get('title', ''))))
