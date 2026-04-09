@@ -14,7 +14,6 @@ from core.scoring import (
 
 
 def get_primera_temporada(title, df_anime):
-    """Dado un título, devuelve la primera temporada disponible en df_anime."""
     base = limpiar_titulo_base(title)
     candidatos = df_anime[df_anime['title'].apply(
         lambda t: limpiar_titulo_base(t) == base
@@ -25,7 +24,6 @@ def get_primera_temporada(title, df_anime):
 
 
 def _idx_posicional(df_anime, title):
-    """Devuelve el índice posicional (iloc) de un título en df_anime."""
     match = df_anime[df_anime['title'] == title]
     if match.empty:
         return None
@@ -147,6 +145,9 @@ def rerank(query_row, candidatos, faiss_scores, df_anime):
             if 'Gore'          in gen_anime: score -= 40
             if 'Psychological' in gen_anime: score -= 15
             if anime['horror_score'] > 0.3:  score -= 30
+            if 'Action'        in gen_anime: score -= 25   # ← agrega esto
+            if 'Super Power'   in gen_anime: score -= 25   # ← agrega esto
+            if 'School'        in gen_anime and anime.get('romance', 0) < 0.3: score -= 15  # ← agrega esto
 
         if is_action or is_adventure or is_scifi or is_fantasy:
             score += anime['adventure_score'] * 10
@@ -373,6 +374,7 @@ def recomendar_anime(row, df_anime, index_scores, index_embed, k=5):
             if is_crime    and anime['crime_score'] < 0.15 and anime['dark_score'] < 0.2: continue
             if is_power    and anime.get('power_score', 0) < 0.35:                        continue
             if is_power    and anime['crime_score'] > 0.5 and anime['dark_score'] < 0.2: continue
+            if is_romance and anime.get('action_score', 0) > 0.5 and anime.get('romance', 0) < 0.2: continue
             if is_music    and anime.get('music_score', 0) < 0.5:                         continue
             if is_drama    and not is_romance and anime.get('romance', 0) > 0.8 and anime.get('drama_score', 0) < 0.4: continue
             if is_action   and is_comedy and not is_family and anime.get('comedy_score', 0) < 0.3: continue
@@ -406,7 +408,6 @@ def recomendar_anime(row, df_anime, index_scores, index_embed, k=5):
         vistos_titulos.add(base)
         cluster_counts[cluster] += 1
 
-        # 🔥 Siempre mostrar la primera temporada
         primera = get_primera_temporada(anime['title'], df_anime)
         if primera is not None:
             idx_p = _idx_posicional(df_anime, primera['title'])
@@ -456,7 +457,6 @@ def recomendar_desde_anime(anime_row, df_anime, index_scores, index_embed, k=2):
         vistos_titulos.add(base)
         cluster_counts[cluster] += 1
 
-        # 🔥 Siempre mostrar la primera temporada
         primera = get_primera_temporada(anime['title'], df_anime)
         if primera is not None:
             idx_p = _idx_posicional(df_anime, primera['title'])
@@ -471,7 +471,6 @@ def recomendar_desde_anime(anime_row, df_anime, index_scores, index_embed, k=2):
 
 
 def preferir_primera_temporada(animes):
-    """De una lista de animes, prefiere el título más corto."""
     if not animes:
         return None
     return min(animes, key=lambda a: len(str(a.get('title', ''))))
