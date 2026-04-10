@@ -24,7 +24,7 @@ df_anime, df_pelser, index_scores, index_embed, modelo_embed = cargar_datos()
 TMDB_KEY = os.getenv("TMDB_API_KEY")
 MAL_CLIENT_ID = os.getenv("MAL_CLIENT_ID")
 
-# ── Session state ──────────────────────────────────────────────────────────────
+#  Session state 
 if 'portal_cadena'       not in st.session_state: st.session_state.portal_cadena   = []
 if 'portal_opciones'     not in st.session_state: st.session_state.portal_opciones = []
 if 'portal_query'        not in st.session_state: st.session_state.portal_query    = ''
@@ -100,7 +100,7 @@ TMDB_GENRE_MAP = {
     878: 'Sci-Fi', 53: 'Thriller', 37: 'Adventure',
 }
 
-# ─── MAL API ──────────────────────────────────────────────────────────────────
+#  MAL API 
 def enriquecer_con_mal(mal_id):
     if not MAL_CLIENT_ID or not mal_id:
         return {}
@@ -130,7 +130,7 @@ def enriquecer_con_mal(mal_id):
     except:
         return {}
 
-# ─── TMDB ─────────────────────────────────────────────────────────────────────
+#  TMDB
 def buscar_en_tmdb(titulo):
     if not TMDB_KEY:
         return None
@@ -283,7 +283,7 @@ def render_card(anime, num):
     """, unsafe_allow_html=True)
 
 
-# ─── HEADER ───────────────────────────────────────────────────────────────────
+#  HEADER 
 col_back, col_title, _ = st.columns([1, 5, 1])
 with col_back:
     st.markdown("<div style='padding-top:36px'>", unsafe_allow_html=True)
@@ -299,7 +299,7 @@ with col_title:
     </div>
     """, unsafe_allow_html=True)
 
-# ─── CONTENIDO ────────────────────────────────────────────────────────────────
+#  CONTENIDO 
 _, col, _ = st.columns([1, 3, 1])
 with col:
     col1, col2 = st.columns([4, 1])
@@ -425,3 +425,15 @@ with col:
             st.session_state.portal_frase_inicio = None
             st.session_state.portal_color_inicio = None
             st.rerun()
+
+st.markdown("""
+<style>
+/* Ocultar sidebar y botón de abrir sidebar */
+[data-testid="stSidebar"] {
+    display: none !important;
+}
+[data-testid="collapsedControl"] {
+    display: none !important;
+}
+</style>
+""", unsafe_allow_html=True)

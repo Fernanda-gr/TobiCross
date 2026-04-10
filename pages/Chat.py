@@ -10,7 +10,7 @@ st.set_page_config(page_title="Chat con YOMI · TobiCross", page_icon="💬", la
 
 load_dotenv()
 
-# ─── YOMI avatar en base64 ────────────────────────────────────────────────────
+#  YOMI avatar
 try:
     with open("assets/yomi.png", "rb") as f:
         _b64 = base64.b64encode(f.read()).decode()
@@ -156,7 +156,7 @@ def procesar_respuesta(contenido_usuario, tipo='chat', nivel=None):
     return yomi_responde(historial, contexto_anime)
 
 
-# ─── HEADER ───────────────────────────────────────────────────────────────────
+#  HEADER 
 col_back, col_title, _ = st.columns([1, 5, 1])
 with col_back:
     st.markdown("<div style='padding-top:36px'>", unsafe_allow_html=True)
@@ -173,7 +173,7 @@ with col_title:
         unsafe_allow_html=True
     )
 
-# ─── LAYOUT: chat + YOMI al lado ──────────────────────────────────────────────
+#  LAYOUT: chat 
 _, col_chat, _ = st.columns([1, 3, 1])
 
 
@@ -277,3 +277,15 @@ with col_chat:
             st.session_state.yomi_pendiente  = None
             st.session_state.yomi_input_key  = 0
             st.rerun()
+
+st.markdown("""
+<style>
+/* Ocultar sidebar y botón de abrir sidebar */
+[data-testid="stSidebar"] {
+    display: none !important;
+}
+[data-testid="collapsedControl"] {
+    display: none !important;
+}
+</style>
+""", unsafe_allow_html=True)

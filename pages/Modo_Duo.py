@@ -32,7 +32,7 @@ client        = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 if 'mal_cache' not in st.session_state:
     st.session_state.mal_cache = {}
 
-# ─── MAL API ──────────────────────────────────────────────────────────────────
+#  MAL API 
 def enriquecer_con_mal(mal_id):
     if not MAL_CLIENT_ID or not mal_id:
         return {}
@@ -61,7 +61,7 @@ def enriquecer_con_mal(mal_id):
     except:
         return {}
 
-# ─── TMDB ─────────────────────────────────────────────────────────────────────
+#  TMDB 
 TMDB_GENRE_MAP = {
     28: 'action_score', 12: 'adventure_score', 16: 'feel_good_score',
     35: 'comedy_score', 80: 'crime_score', 99: 'dark_score',
@@ -221,7 +221,7 @@ def buscar_pelicula(query):
     return None, f"No encontré '{query}' en ninguna parte."
 
 
-# ─── HEADER ───────────────────────────────────────────────────────────────────
+#  HEADER 
 col_back, col_title, _ = st.columns([1, 5, 1])
 with col_back:
     st.markdown("<div style='padding-top:36px'>", unsafe_allow_html=True)
@@ -237,7 +237,7 @@ with col_title:
     </div>
     """, unsafe_allow_html=True)
 
-# ─── CONTENIDO ────────────────────────────────────────────────────────────────
+#  CONTENIDO 
 _, col, _ = st.columns([1, 4, 1])
 with col:
     col1, colv, col2 = st.columns([5, 1, 5])
@@ -394,3 +394,15 @@ with col:
                       </div>
                     </div>
                     """, unsafe_allow_html=True)
+
+st.markdown("""
+<style>
+/* Ocultar sidebar y botón de abrir sidebar */
+[data-testid="stSidebar"] {
+    display: none !important;
+}
+[data-testid="collapsedControl"] {
+    display: none !important;
+}
+</style>
+""", unsafe_allow_html=True)

@@ -134,7 +134,7 @@ ARQUETIPOS = {
     'libre':     {'nombre':'✨ El Alma Libre','descripcion':'Ríes fácil, amas fácil, vives fácil. Tu anime ideal es el que se siente como un abrazo.','query':'Friends','color':'#854F0B','bg':'#FAEEDA'},
 }
 
-# ─── HEADER ───────────────────────────────────────────────────────────────────
+#  HEADER 
 col_back, col_title, _ = st.columns([1, 5, 1])
 with col_back:
     st.markdown("<div style='padding-top:36px'>", unsafe_allow_html=True)
@@ -153,7 +153,7 @@ with col_title:
 
 paso = st.session_state.destino_paso
 
-# ─── PREGUNTAS ────────────────────────────────────────────────────────────────
+#  PREGUNTAS 
 if paso < 5:
     _, col, _ = st.columns([1, 3, 1])
     with col:
@@ -203,7 +203,7 @@ if paso < 5:
                 st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
 
-# ─── RESULTADO ────────────────────────────────────────────────────────────────
+#  RESULTADO 
 else:
     puntos = {'errante': 0, 'romantico': 0, 'guerrero': 0, 'filosofo': 0, 'libre': 0}
     for paso_idx, opcion_idx in st.session_state.destino_respuestas.items():
@@ -248,7 +248,7 @@ else:
                         st.markdown(
                             f'<div style="border-radius:14px;border:1px solid #eee;overflow:hidden;">'
                             f'<div style="background:{info["bg"]};height:160px;display:flex;align-items:center;justify-content:center;">'
-                            f'<img src="{anime["image_url"]}" style="height:190px;width:auto;object-fit:contain;"/>'
+                            f'<img src="{anime["image_url"]}" style="height:150px;width:auto;object-fit:contain;"/>'
                             f'</div>'
                             f'<div style="padding:14px;">'
                             f'<p style="font-size:15px;font-weight:600;margin:0 0 4px;color:#111;line-height:1.3;">{anime["title"]}</p>'
@@ -265,3 +265,15 @@ else:
             st.session_state.destino_respuestas = {}
             st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
+
+st.markdown("""
+<style>
+/* Ocultar sidebar y botón de abrir sidebar */
+[data-testid="stSidebar"] {
+    display: none !important;
+}
+[data-testid="collapsedControl"] {
+    display: none !important;
+}
+</style>
+""", unsafe_allow_html=True)

@@ -20,7 +20,7 @@ def norm(v):
     return v / n if n > 0 else v
 
 
-# ── PESOS ─────────────────────────────────────
+#  PESOS 
 peso_genres    = 0.50
 peso_demog     = 0.20
 peso_embed     = 0.20
@@ -43,7 +43,7 @@ peso_power     = 0.6
 peso_music     = 0.6
 
 
-# ── SCORES ────────────────────────────────────
+#  SCORES 
 def calcular_horror_score(genres, themes=None, demographic=None, synopsis=''):
     genres_set = to_set(genres) | to_set(themes) | to_set(demographic)
     synopsis   = str(synopsis).lower()
@@ -376,7 +376,7 @@ def calcular_music_score(genres, themes=None, demographic=None, synopsis=''):
     return max(0.0, min(score, 1.0))
 
 
-# ── FUNCIÓN PRINCIPAL: calcular todos los scores ──
+#  FUNCIÓN PRINCIPAL: calcular todos los scores 
 def calcular_todos_los_scores(genres_clean, themes=None, demographic=None, synopsis=''):
     """Calcula todos los scores para una película/serie nueva en tiempo real."""
     return {
@@ -400,7 +400,7 @@ def calcular_todos_los_scores(genres_clean, themes=None, demographic=None, synop
     }
 
 
-# ── LIMPIEZA DE TÍTULOS ───────────────────────
+#  LIMPIEZA DE TÍTULOS 
 def limpiar_titulo_base(titulo):
     titulo = titulo.lower()
     titulo = re.sub(r'[\(\[].*?[\)\]]', '', titulo)

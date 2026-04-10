@@ -35,7 +35,7 @@ def construir_vector_desde_tmdb(row_falso, modelo_embed=None):
 
     synopsis = row_falso.get('sinopsis', '') or row_falso.get('synopsis', '') or ''
 
-    # ── Scores narrativos reales ───────────────────────────────────────────────
+    #  Scores narrativos reales 
     scores = calcular_todos_los_scores(
         genres_clean=genres_list,
         themes=None,
@@ -43,14 +43,14 @@ def construir_vector_desde_tmdb(row_falso, modelo_embed=None):
         synopsis=synopsis
     )
 
-    # ── Embedding real o ceros ─────────────────────────────────────────────────
+    #  Embedding real o ceros 
     if modelo_embed is not None and synopsis:
         embedding = modelo_embed.encode(synopsis, show_progress_bar=False)
     else:
         embedding = np.zeros(384, dtype='float32')
     row_falso['embedding'] = embedding
 
-    # ── genres_vector (20 dims, one-hot) ──────────────────────────────────────
+    #  genres_vector (20 dims, one-hot) 
     genres_vec = np.zeros(len(GENRES_FINAL), dtype=float)
     for g in genres_list:
         if g in GENRES_FINAL:
@@ -58,12 +58,12 @@ def construir_vector_desde_tmdb(row_falso, modelo_embed=None):
     genres_vec_norm = norm(genres_vec)
     n_genres = len(genres_vec_norm)
 
-    # ── demog_vector (5 dims, cero para TMDB) ─────────────────────────────────
+    #  demog_vector (5 dims, cero para TMDB) 
     demog_vec      = np.zeros(len(DEMOGRAPHIC_COLS), dtype=float)
     demog_vec_norm = demog_vec
     n_demog        = len(demog_vec_norm)
 
-    # ── Vector final ───────────────────────────────────────────────────────────
+    #  Vector final 
     vector = np.concatenate([
         genres_vec_norm * (peso_genres / max(n_genres, 1)),
         demog_vec_norm  * (peso_demog  / max(n_demog,  1)),

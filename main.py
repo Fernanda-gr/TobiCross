@@ -43,15 +43,13 @@ with col_titulo:
     st.markdown("""
     <div style="display:flex; flex-direction:column; justify-content:center;
                 height:100%; padding-left:30px; padding-top:10px;">
-       <p style="font-size:11px; color:#534AB7 !important; letter-spacing:5px;
-          font-weight:600; margin:0 0 8px; text-transform:uppercase;">
-    Descubre tu anime
-</p>
+        <p style="font-size:11px; color:#534AB7; letter-spacing:5px;
+                  font-weight:600; margin:0 0 8px; text-transform:uppercase;">
             Descubre tu anime
         </p>
-        <p style="font-size:120px; font-weight:900; color:#1A1635;
-                  margin:0 0 10px; line-height:1; letter-spacing:-4px;
-                  font-family: 'Georgia', serif;">
+        <p style="font-size:clamp(48px, 7vw, 110px); font-weight:900; color:#1A1635;
+                margin:0 0 10px; line-height:1; letter-spacing:-2px;
+                font-family: 'Georgia', serif;">
             TobiCross
         </p>
         <p style="font-size:16px; color:#888; margin:0; line-height:1.5;">
@@ -63,7 +61,7 @@ with col_titulo:
 st.markdown("<br>", unsafe_allow_html=True)
 
 
-# ─── FEATURES ─────────────────────────────────────────────────────────────────
+#  FEATURES 
 FEATURES = [
     ("🎯", "RECOMENDADOR",  "Busca tu película favorita.",   "pages/Recomendador.py", "linear-gradient(135deg, #6B2737, #C0394F)"),
     ("🔮", "MODO DESTINO",  "5 preguntas, un destino.",      "pages/Modo_Destino.py", "linear-gradient(135deg, #1B3A6B, #2E6DB4)"),
@@ -113,21 +111,31 @@ def anime_card(emoji, titulo, desc, pagina, color, key):
         st.switch_page(pagina)
 
 
-# ─── GRID 1 ───────────────────────────────────────────────────────────────────
+#  GRID 1 
 cols1 = st.columns(4)
 for i in range(4):
     emoji, titulo, desc, pagina, color = FEATURES[i]
     with cols1[i]:
         anime_card(emoji, titulo, desc, pagina, color, key=f"card_{i}")
 
-# ─── GRID 2 ───────────────────────────────────────────────────────────────────
+#  GRID 2 
 _, c1, c2, c3, _ = st.columns([0.1, 1, 1, 1, 0.1])
 for j, col in enumerate([c1, c2, c3]):
     emoji, titulo, desc, pagina, color = FEATURES[4 + j]
     with col:
         anime_card(emoji, titulo, desc, pagina, color, key=f"card_{4+j}")
 
-
+st.markdown("""
+<style>
+/* Ocultar sidebar y botón de abrir sidebar */
+[data-testid="stSidebar"] {
+    display: none !important;
+}
+[data-testid="collapsedControl"] {
+    display: none !important;
+}
+</style>
+""", unsafe_allow_html=True)
 
 st.markdown("---")
 st.markdown("© 2026 Fernanda García | Recomendador de Anime")

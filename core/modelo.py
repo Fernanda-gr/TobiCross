@@ -145,9 +145,9 @@ def rerank(query_row, candidatos, faiss_scores, df_anime):
             if 'Gore'          in gen_anime: score -= 40
             if 'Psychological' in gen_anime: score -= 15
             if anime['horror_score'] > 0.3:  score -= 30
-            if 'Action'        in gen_anime: score -= 25   # ← agrega esto
-            if 'Super Power'   in gen_anime: score -= 25   # ← agrega esto
-            if 'School'        in gen_anime and anime.get('romance', 0) < 0.3: score -= 15  # ← agrega esto
+            if 'Action'        in gen_anime: score -= 25   
+            if 'Super Power'   in gen_anime: score -= 25   
+            if 'School'        in gen_anime and anime.get('romance', 0) < 0.3: score -= 15  
 
         if is_action or is_adventure or is_scifi or is_fantasy:
             score += anime['adventure_score'] * 10

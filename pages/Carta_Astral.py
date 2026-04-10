@@ -147,12 +147,12 @@ def elegir_carta(i):
     st.session_state.carta_revelada = carta
     r_query = df_pelser[df_pelser['título'].str.contains(carta['query'], case=False, na=False)]
     if not r_query.empty:
-        recs = recomendar_anime(r_query.iloc[0], df_anime, index_scores, index_embed, k=1)
-        st.session_state.carta_anime = recs[0] if recs else None
+        recs = recomendar_anime(r_query.iloc[0], df_anime, index_scores, index_embed, k=10)
+        st.session_state.carta_anime = random.choice(recs) if recs else None
         st.session_state.carta_generada = True
 
 
-# ─── SELECCIÓN DE CARTA ───────────────────────────────────────────────────────
+#  SELECCIÓN DE CARTA 
 if not st.session_state.carta_generada:
     st.markdown(
         '<p style="font-size:13px;color:#888;text-align:center;font-style:italic;margin:1rem 0 1.5rem;">'
@@ -205,7 +205,7 @@ if not st.session_state.carta_generada:
                 st.rerun()
 
 
-# ─── CARTA REVELADA ───────────────────────────────────────────────────────────
+#  CARTA REVELADA 
 if st.session_state.carta_generada and st.session_state.carta_revelada:
     carta         = st.session_state.carta_revelada
     anime         = st.session_state.carta_anime
@@ -266,3 +266,15 @@ if st.session_state.carta_generada and st.session_state.carta_revelada:
             st.session_state.carta_anime    = None
             st.session_state.carta_generada = False
             st.rerun()
+
+st.markdown("""
+<style>
+/* Ocultar sidebar y botón de abrir sidebar */
+[data-testid="stSidebar"] {
+    display: none !important;
+}
+[data-testid="collapsedControl"] {
+    display: none !important;
+}
+</style>
+""", unsafe_allow_html=True)

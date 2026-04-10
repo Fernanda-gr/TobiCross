@@ -6,6 +6,7 @@ import os
 import requests
 import numpy as np
 from dotenv import load_dotenv
+import random
 
 load_dotenv()
 
@@ -81,7 +82,7 @@ TMDB_GENRE_MAP = {
     878: 'scifi', 53: 'thriller_score', 10752: 'action_score',
 }
 
-# ─── MAL API ──────────────────────────────────────────────────────────────────
+#  MAL API 
 def enriquecer_con_mal(mal_id):
     if not MAL_CLIENT_ID or not mal_id:
         return {}
@@ -110,7 +111,7 @@ def enriquecer_con_mal(mal_id):
     except:
         return {}
 
-# ─── TMDB ─────────────────────────────────────────────────────────────────────
+#  TMDB 
 def buscar_en_tmdb(titulo):
     if not TMDB_KEY:
         return None
@@ -224,7 +225,7 @@ def build_guardian_html(guardian):
     )
 
 
-# ─── HEADER ───────────────────────────────────────────────────────────────────
+#  HEADER 
 col_back, col_title, _ = st.columns([1, 5, 1])
 with col_back:
     st.markdown("<div style='padding-top:36px'>", unsafe_allow_html=True)
@@ -240,7 +241,7 @@ with col_title:
     </div>
     """, unsafe_allow_html=True)
 
-# ─── CONTENIDO ────────────────────────────────────────────────────────────────
+#  CONTENIDO 
 _, col, _ = st.columns([1, 3, 1])
 with col:
     st.markdown('<p style="font-size:13px;color:#7F77DD;letter-spacing:2px;margin-bottom:8px;font-weight:500;">TUS PELÍCULAS FAVORITAS</p>', unsafe_allow_html=True)
@@ -282,8 +283,9 @@ with col:
                     guardian = None
                     r_query  = df_pelser[df_pelser['título'].str.contains(arq['query'], case=False, na=False)]
                     if not r_query.empty:
-                        recs     = recomendar_anime(r_query.iloc[0], df_anime, index_scores, index_embed, k=3)
-                        guardian = preferir_primera_temporada(recs)
+                        recs     = recomendar_anime(r_query.iloc[0], df_anime, index_scores, index_embed, k=10)
+                        random.shuffle(recs)
+                        guardian = preferir_primera_temporada(recs)     
 
                 nivel         = int(min(sum(stats.values()) / len(stats), 99))
                 stats_html    = build_stats_html(stats)
@@ -311,3 +313,14 @@ with col:
                     f'</div>',
                     unsafe_allow_html=True
                 )
+st.markdown("""
+<style>
+/* Ocultar sidebar y botón de abrir sidebar */
+[data-testid="stSidebar"] {
+    display: none !important;
+}
+[data-testid="collapsedControl"] {
+    display: none !important;
+}
+</style>
+""", unsafe_allow_html=True)

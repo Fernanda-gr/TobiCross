@@ -31,7 +31,7 @@ client        = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 if 'mal_cache' not in st.session_state:
     st.session_state.mal_cache = {}
 
-# ─── MAL API ──────────────────────────────────────────────────────────────────
+#  MAL API 
 def enriquecer_con_mal(mal_id):
     if not MAL_CLIENT_ID or not mal_id:
         return {}
@@ -60,7 +60,7 @@ def enriquecer_con_mal(mal_id):
     except:
         return {}
 
-# ─── TMDB ─────────────────────────────────────────────────────────────────────
+#  TMDB 
 TMDB_GENRE_MAP = {
     28:    'Action',    12: 'Adventure', 16: 'Animation', 35: 'Comedy',
     80:    'Crime',     18: 'Drama',  10751: 'Kids',       14: 'Fantasy',
@@ -127,7 +127,7 @@ def buscar_pelicula(query):
         return r.iloc[0]
     return buscar_en_tmdb(query)
 
-# ─── COLORES ──────────────────────────────────────────────────────────────────
+#  COLORES 
 GENRE_COLORS = {
     'Horror':    ('#EEEDFE', '#3C3489'), 'Romance':   ('#FBEAF0', '#72243E'),
     'Action':    ('#E6F1FB', '#0C447C'), 'Adventure': ('#E6F1FB', '#0C447C'),
@@ -202,7 +202,7 @@ def render_carta(anime, explicacion=''):
     """
 
 
-# ─── HEADER ───────────────────────────────────────────────────────────────────
+#  HEADER 
 col_back, col_title, _ = st.columns([1, 5, 1])
 with col_back:
     st.markdown("<div style='padding-top:36px'>", unsafe_allow_html=True)
@@ -218,7 +218,7 @@ with col_title:
     </div>
     """, unsafe_allow_html=True)
 
-# ─── BÚSQUEDA ─────────────────────────────────────────────────────────────────
+#  BÚSQUEDA 
 _, col, _ = st.columns([1, 4, 1])
 with col:
     col1, col2 = st.columns([5, 1])
@@ -277,3 +277,14 @@ with col:
 
                 with cols[i]:
                     st.markdown(render_carta(anime, explicacion), unsafe_allow_html=True)
+st.markdown("""
+<style>
+/* Ocultar sidebar y botón de abrir sidebar */
+[data-testid="stSidebar"] {
+    display: none !important;
+}
+[data-testid="collapsedControl"] {
+    display: none !important;
+}
+</style>
+""", unsafe_allow_html=True)
