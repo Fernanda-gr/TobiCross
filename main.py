@@ -138,5 +138,5 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.markdown("---")
-st.markdown("© 2026 Fernanda García | Recomendador de Anime")
+st.markdown("© Abril-2026 Fernanda García | Recomendador de Anime")
 st.markdown("Datos obtenidos de APIs públicas (MAL/TMDB). Uso educativo.")
