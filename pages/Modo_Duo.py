@@ -234,7 +234,7 @@ with col_title:
     <div style="text-align:center; margin-bottom:2rem;">
       <p style="font-size:11px; color:#7F77DD; letter-spacing:3px; margin:0 0 8px; font-weight:500;">MODO DÚO</p>
       <p style="font-size:clamp(32px, 6vw, 60px); font-weight:700; margin:0 0 8px;">👥 Modo Dúo</p>
-      <p style="font-size:clamp(13px, 2vw, 16px); color:#888; margin:0;">Cada uno elige su película favorita y el universo hace el resto</p>
+      <p style="font-size:clamp(13px, 2vw, 16px); color:#888; margin:0;">Cada uno elige su película-serie favorita y el universo hace el resto</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -244,12 +244,12 @@ with col:
     col1, colv, col2 = st.columns([5, 1, 5])
     with col1:
         st.markdown('<p style="font-size:11px; font-weight:500; color:#534AB7; letter-spacing:2px; margin:0 0 4px;">PERSONA 1</p>', unsafe_allow_html=True)
-        q1 = st.text_input("", placeholder="Tu película favorita...", key="duo_q1", label_visibility="collapsed")
+        q1 = st.text_input("", placeholder="Tu película-serie favorita...", key="duo_q1", label_visibility="collapsed")
     with colv:
         st.markdown('<div style="display:flex; align-items:center; justify-content:center; height:100%; padding-top:20px;"><div style="width:40px;height:40px;border-radius:50%;background:#EEEDFE;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#534AB7;">VS</div></div>', unsafe_allow_html=True)
     with col2:
         st.markdown('<p style="font-size:11px; font-weight:500; color:#993556; letter-spacing:2px; margin:0 0 4px;">PERSONA 2</p>', unsafe_allow_html=True)
-        q2 = st.text_input("", placeholder="Tu película favorita...", key="duo_q2", label_visibility="collapsed")
+        q2 = st.text_input("", placeholder="Tu película-serie favorita...", key="duo_q2", label_visibility="collapsed")
 
     st.markdown("")
     buscar = st.button("✨ Encontrar su anime en común", use_container_width=True)

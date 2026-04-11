@@ -295,7 +295,7 @@ with col_title:
     <div style="text-align:center; margin-bottom:2rem;">
       <p style="font-size:11px; color:#7F77DD; letter-spacing:3px; margin:0 0 8px; font-weight:500;">PORTAL ENTRE HISTORIAS</p>
       <p style="font-size:clamp(32px, 6vw, 60px); font-weight:700; margin:0 0 8px;">🗺️ Portal entre historias</p>
-      <p style="font-size:clamp(13px, 2vw, 16px); color:#888; margin:0;">Elige un anime y sigue la cadena</p>
+      <p style="font-size:clamp(13px, 2vw, 16px); color:#888; margin:0;">Busca una pelicula-serie, elige un anime y sigue la cadena</p>
     </div>
     """, unsafe_allow_html=True)
 

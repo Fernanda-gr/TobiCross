@@ -244,11 +244,11 @@ with col_title:
 #  CONTENIDO 
 _, col, _ = st.columns([1, 3, 1])
 with col:
-    st.markdown('<p style="font-size:13px;color:#7F77DD;letter-spacing:2px;margin-bottom:8px;font-weight:500;">TUS PELÍCULAS FAVORITAS</p>', unsafe_allow_html=True)
+    st.markdown('<p style="font-size:13px;color:#7F77DD;letter-spacing:2px;margin-bottom:8px;font-weight:500;">TUS PELÍCULAS-SERIES FAVORITAS</p>', unsafe_allow_html=True)
 
     peliculas = []
     for i in range(5):
-        p = st.text_input("", placeholder=f"Película {i+1}...", label_visibility="collapsed", key=f"perfil_p{i}")
+        p = st.text_input("", placeholder=f"Película-Serie {i+1}...", label_visibility="collapsed", key=f"perfil_p{i}")
         if p:
             peliculas.append(p)
 
@@ -257,7 +257,7 @@ with col:
 
     if generar:
         if len(peliculas) < 3:
-            st.warning("Ingresa al menos 3 películas para generar tu perfil.")
+            st.warning("Ingresa al menos 3 películas-series para generar tu perfil.")
         else:
             rows = []
             no_encontradas = []
@@ -272,7 +272,7 @@ with col:
                 st.warning(f"No encontré: {', '.join(no_encontradas)}")
 
             if len(rows) < 2:
-                st.error("Necesito encontrar al menos 2 películas para calcular tu perfil.")
+                st.error("Necesito encontrar al menos 2 películas-series para calcular tu perfil.")
             else:
                 with st.spinner("✨ Calculando tu arquetipo..."):
                     promedios = calcular_perfil(rows)

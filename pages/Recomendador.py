@@ -215,7 +215,7 @@ with col_title:
     <div style="text-align:center; margin-bottom:2rem;">
       <p style="font-size:11px; color:#7F77DD; letter-spacing:3px; margin:0 0 8px; font-weight:500;">RECOMENDADOR</p>
       <p style="font-size:clamp(32px, 6vw, 60px); font-weight:700; margin:0 0 8px;">🎯 Recomendador</p>
-      <p style="font-size:clamp(13px, 2vw, 16px); color:#888; margin:0;">Busca tu película favorita y encuentra tu anime perfecto</p>
+      <p style="font-size:clamp(13px, 2vw, 16px); color:#888; margin:0;">Busca tu película-serie favorita y encuentra tu anime perfecto</p>
     </div>
     """, unsafe_allow_html=True)
 
