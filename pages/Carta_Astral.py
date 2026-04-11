@@ -135,8 +135,8 @@ with col_title:
     st.markdown(
         '<div style="text-align:center;margin-bottom:1rem;">'
         '<p style="font-size:11px;color:#534AB7;letter-spacing:3px;margin-bottom:4px;">CARTA ASTRAL</p>'
-        '<p style="font-size:50px;font-weight:500;margin:0 0 6px;">El Tarot Animero</p>'
-        '<p style="font-size:14px;color:#888;margin:0;">El universo tiene un anime esperándote</p>'
+        '<p style="font-size:clamp(28px, 5vw, 50px);font-weight:500;margin:0 0 6px;">El Tarot Animero</p>'
+        '<p style="font-size:clamp(12px, 2vw, 14px);color:#888;margin:0;">El universo tiene un anime esperándote</p>'
         '</div>',
         unsafe_allow_html=True
     )

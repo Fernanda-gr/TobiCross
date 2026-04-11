@@ -2,6 +2,8 @@
 import numpy as np
 import faiss
 from collections import defaultdict, Counter
+import re
+import random
 
 from core.scoring import (
     to_set, norm, limpiar_titulo_base, calcular_todos_los_scores,
@@ -473,4 +475,21 @@ def recomendar_desde_anime(anime_row, df_anime, index_scores, index_embed, k=2):
 def preferir_primera_temporada(animes):
     if not animes:
         return None
-    return min(animes, key=lambda a: len(str(a.get('title', ''))))
+    
+    # Separar los que parecen primera temporada (título corto, sin número > 1)
+    def es_primera(a):
+        title = str(a.get('title', '')).lower()
+        # Excluir si tiene números > 1 explícitos
+        numeros = re.findall(r'\b(\d+)\b', title)
+        for n in numeros:
+            if int(n) > 1:
+                return False
+        # Excluir si tiene Season 2+, Part 2+, etc.
+        if re.search(r'(season|part|cour)\s*[2-9]', title, re.IGNORECASE):
+            return False
+        return True
+    
+    primeras = [a for a in animes if es_primera(a)]
+    pool = primeras if primeras else animes
+    
+    return random.choice(pool)

@@ -8,6 +8,7 @@ import os
 import requests
 import numpy as np
 from dotenv import load_dotenv
+import random
 
 load_dotenv()
 
@@ -213,8 +214,8 @@ with col_title:
     st.markdown("""
     <div style="text-align:center; margin-bottom:2rem;">
       <p style="font-size:11px; color:#7F77DD; letter-spacing:3px; margin:0 0 8px; font-weight:500;">RECOMENDADOR</p>
-      <p style="font-size:60px; font-weight:700; margin:0 0 8px;">🎯 Recomendador</p>
-      <p style="font-size:16px; color:#888; margin:0;">Busca tu película favorita y encuentra tu anime perfecto</p>
+      <p style="font-size:clamp(32px, 6vw, 60px); font-weight:700; margin:0 0 8px;">🎯 Recomendador</p>
+      <p style="font-size:clamp(13px, 2vw, 16px); color:#888; margin:0;">Busca tu película favorita y encuentra tu anime perfecto</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -250,7 +251,9 @@ with col:
             """, unsafe_allow_html=True)
 
             with st.spinner("🎌 Buscando anime similar..."):
-                recomendaciones = recomendar_anime(row, df_anime, index_scores, index_embed, k=5)
+                recomendaciones = recomendar_anime(row, df_anime, index_scores, index_embed, k=15)
+                random.shuffle(recomendaciones)
+                recomendaciones = recomendaciones[:5]
 
             st.markdown('<p style="font-size:16px; font-weight:600; margin:0 0 12px;">🎌 Animes recomendados</p>', unsafe_allow_html=True)
 

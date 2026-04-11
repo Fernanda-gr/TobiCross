@@ -236,8 +236,8 @@ with col_title:
     st.markdown("""
     <div style="text-align:center; margin-bottom:2rem;">
       <p style="font-size:11px; color:#7F77DD; letter-spacing:3px; margin:0 0 8px; font-weight:500;">PERFIL DE FAN</p>
-      <p style="font-size:60px; font-weight:700; margin:0 0 8px;">📊 Perfil de Fan</p>
-      <p style="font-size:16px; color:#888; margin:0;">Descubre tu arquetipo animero</p>
+      <p style="font-size:clamp(32px, 6vw, 60px); font-weight:700; margin:0 0 8px;">📊 Perfil de Fan</p>
+      <p style="font-size:clamp(13px, 2vw, 16px); color:#888; margin:0;">Descubre tu arquetipo animero</p>
     </div>
     """, unsafe_allow_html=True)
 

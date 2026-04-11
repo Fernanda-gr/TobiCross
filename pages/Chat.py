@@ -167,8 +167,8 @@ with col_title:
     st.markdown(
         '<div style="text-align:center;margin-bottom:1.5rem;">'
         '<p style="font-size:11px;color:#534AB7;letter-spacing:3px;margin-bottom:8px;">CHAT</p>'
-        '<p style="font-size:60px;font-weight:700;margin:0 0 8px;">💬 Habla con YOMI</p>'
-        '<p style="font-size:16px;color:#888;margin:0;">Tu guía entre mundos narrativos</p>'
+        '<p style="font-size:clamp(28px, 6vw, 60px);font-weight:700;margin:0 0 8px;">💬 Habla con YOMI</p>'
+        '<p style="font-size:clamp(13px, 2vw, 16px);color:#888;margin:0;">Tu guía entre mundos narrativos</p>'
         '</div>',
         unsafe_allow_html=True
     )

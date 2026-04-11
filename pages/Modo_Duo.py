@@ -9,6 +9,7 @@ from collections import defaultdict
 import faiss
 from dotenv import load_dotenv
 from openai import OpenAI
+import random
 
 load_dotenv()
 
@@ -232,8 +233,8 @@ with col_title:
     st.markdown("""
     <div style="text-align:center; margin-bottom:2rem;">
       <p style="font-size:11px; color:#7F77DD; letter-spacing:3px; margin:0 0 8px; font-weight:500;">MODO DÚO</p>
-      <p style="font-size:60px; font-weight:700; margin:0 0 8px;">👥 Modo Dúo</p>
-      <p style="font-size:16px; color:#888; margin:0;">Cada uno elige su película favorita y el universo hace el resto</p>
+      <p style="font-size:clamp(32px, 6vw, 60px); font-weight:700; margin:0 0 8px;">👥 Modo Dúo</p>
+      <p style="font-size:clamp(13px, 2vw, 16px); color:#888; margin:0;">Cada uno elige su película favorita y el universo hace el resto</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -313,6 +314,10 @@ with col:
                 rrf1    = get_rrf(row1)
                 rrf2    = get_rrf(row2)
                 top_idx = fusionar(rrf1, rrf2, row1, row2)
+                top_idx = list(top_idx)
+                pool    = top_idx[:20]
+                random.shuffle(pool)
+                top_idx = pool + top_idx[20:]
 
             st.markdown('<p style="font-size:16px; font-weight:600; margin:1rem 0 12px;">🎌 Anime que los une</p>', unsafe_allow_html=True)
 

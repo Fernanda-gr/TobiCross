@@ -5,7 +5,7 @@ import ast
 import os
 import requests
 from dotenv import load_dotenv
-
+import random 
 load_dotenv()
 
 st.set_page_config(page_title="Portal · TobiCross", page_icon="🗺️", layout="wide")
@@ -294,8 +294,8 @@ with col_title:
     st.markdown("""
     <div style="text-align:center; margin-bottom:2rem;">
       <p style="font-size:11px; color:#7F77DD; letter-spacing:3px; margin:0 0 8px; font-weight:500;">PORTAL ENTRE HISTORIAS</p>
-      <p style="font-size:60px; font-weight:700; margin:0 0 8px;">🗺️ Portal entre historias</p>
-      <p style="font-size:16px; color:#888; margin:0;">Elige un anime y sigue la cadena</p>
+      <p style="font-size:clamp(32px, 6vw, 60px); font-weight:700; margin:0 0 8px;">🗺️ Portal entre historias</p>
+      <p style="font-size:clamp(13px, 2vw, 16px); color:#888; margin:0;">Elige un anime y sigue la cadena</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -396,6 +396,8 @@ with col:
                     <p style="font-size:12px;color:#555;margin:0;line-height:1.5;">
                       {opcion['synopsis'][:90]}...
                     </p>
+                    <a href="https://myanimelist.net/anime/{opcion['mal_id']}" target="_blank"
+                       style="font-size:11px;color:#534AB7;text-decoration:none;">Ver en MAL →</a>
                   </div>
                 </div>
                 """, unsafe_allow_html=True)

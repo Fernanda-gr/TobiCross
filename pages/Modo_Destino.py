@@ -2,7 +2,8 @@ import streamlit as st
 from core.data import cargar_datos
 from core.modelo import recomendar_anime
 import ast
-
+import random 
+import re
 st.set_page_config(page_title="Modo Destino · TobiCross", page_icon="🎭", layout="wide")
 
 st.markdown("""
@@ -145,8 +146,8 @@ with col_title:
     st.markdown(
         '<div style="text-align:center;margin-bottom:2rem;">'
         '<p style="font-size:11px;color:#534AB7;letter-spacing:3px;margin-bottom:8px;">MODO DESTINO</p>'
-        '<p style="font-size:60px;font-weight:700;margin:0 0 8px;">🎭 Modo Destino</p>'
-        '<p style="font-size:16px;color:#888;margin:0;">Cinco preguntas. Un destino. Tu anime perfecto.</p>'
+        '<p style="font-size:clamp(32px, 6vw, 60px);font-weight:700;margin:0 0 8px;">🎭 Modo Destino</p>'
+        '<p style="font-size:clamp(13px, 2vw, 16px);color:#888;margin:0;">Cinco preguntas. Un destino. Tu anime perfecto.</p>'
         '</div>',
         unsafe_allow_html=True
     )
@@ -232,8 +233,9 @@ else:
             resultados = df_pelser[df_pelser['título'].str.contains(info['query'], case=False, na=False)]
             if not resultados.empty:
                 row = resultados.iloc[0]
-                recomendaciones = recomendar_anime(row, df_anime, index_scores, index_embed, k=3)
-
+                recomendaciones = recomendar_anime(row, df_anime, index_scores, index_embed, k=15)
+                random.shuffle(recomendaciones)
+                recomendaciones = recomendaciones[:3]
                 st.markdown(
                     "<p style='font-size:20px;font-weight:600;margin:1rem 0;'>✨ Tu anime del destino</p>",
                     unsafe_allow_html=True
